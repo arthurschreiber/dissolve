@@ -1,7 +1,10 @@
 var BufferList = require("bl"),
-    stream = require("readable-stream");
+    stream = require("readable-stream"),
+    util = require("util");
 
-var Dissolve = module.exports = function Dissolve(options) {
+module.exports = Dissolve;
+
+function Dissolve(options) {
   if (!(this instanceof Dissolve)) { return new Dissolve(options); }
 
   if (!options) {
@@ -19,8 +22,9 @@ var Dissolve = module.exports = function Dissolve(options) {
   this.vars_list = [];
 
   this._buffer = new BufferList();
-};
-Dissolve.prototype = Object.create(stream.Transform.prototype, {constructor: {value: Dissolve}});
+}
+
+util.inherits(Dissolve, stream.Transform);
 
 Dissolve.prototype._job_down = function _job_down(job) {
   var tmp = this.vars;
